@@ -30,12 +30,28 @@ if (!pdfArg) die("usage: node pdf2vault.mjs <file.pdf> [slug]");
 const pdfPath = resolve(pdfArg);
 if (!existsSync(pdfPath)) die(`no such file: ${pdfPath}`);
 
-const slug = slugArg
+const base = slugArg
   ? slugify(slugArg)
   : slugify(basename(pdfPath, extname(pdfPath)));
 
-const pastedDir = join(VAULT, PASTED, slug);
 const notesDir = join(VAULT, NOTES);
+
+// find the first name where BOTH the note and the image folder are free,
+// so a versioned run never writes into a previous run's image folder
+const firstFreeName = (stem) => {
+  for (let n = 0; n < 100; n++) {
+    const name = n === 0 ? stem : `${stem}(${n})`;
+    const noteFree = !existsSync(join(notesDir, `${name}.md`));
+    const dirFree = !existsSync(join(VAULT, PASTED, name));
+    if (noteFree && dirFree) return name;
+  }
+  die(`100 versions of "${stem}" already exist — tidy up or pass a new slug`);
+};
+
+const slug = firstFreeName(base);
+const pastedDir = join(VAULT, PASTED, slug);
+const notePath = join(notesDir, `${slug}.md`);
+
 mkdirSync(pastedDir, { recursive: true });
 mkdirSync(notesDir, { recursive: true });
 
@@ -69,8 +85,6 @@ pages: ${pages.length}
 ${embeds}
 `;
 
-const notePath = join(notesDir, `${slug}.md`);
-if (existsSync(notePath)) die(`note already exists: ${notePath}`);
 writeFileSync(notePath, note, "utf8");
 
 console.log(`${pages.length} pages -> ${PASTED}/${slug}/${slug}-NN.png`);
