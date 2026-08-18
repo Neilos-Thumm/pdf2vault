@@ -10,7 +10,7 @@ import { basename, extname, join, resolve } from "node:path";
 const VAULT = process.env.VAULT ?? "/Users/parunthummadetsak/Documents/Obsidian/Local Vault";
 const PASTED = "Pasted";
 const NOTES = "Notes";
-const DPI = 150; // 150 is crisp for slides; bump to 200 for dense diagrams
+const DPI = 100; // 100 is legible for bullet slides; bump to 150 for dense diagrams
 // -----------------------------------------------------------------------
 
 const slugify = (s) =>
@@ -34,7 +34,7 @@ const slug = slugArg
   ? slugify(slugArg)
   : slugify(basename(pdfPath, extname(pdfPath)));
 
-const pastedDir = join(VAULT, PASTED);
+const pastedDir = join(VAULT, PASTED, slug);
 const notesDir = join(VAULT, NOTES);
 mkdirSync(pastedDir, { recursive: true });
 mkdirSync(notesDir, { recursive: true });
@@ -73,5 +73,5 @@ const notePath = join(notesDir, `${slug}.md`);
 if (existsSync(notePath)) die(`note already exists: ${notePath}`);
 writeFileSync(notePath, note, "utf8");
 
-console.log(`${pages.length} pages -> ${PASTED}/${slug}-NN.png`);
+console.log(`${pages.length} pages -> ${PASTED}/${slug}/${slug}-NN.png`);
 console.log(`note written    -> ${NOTES}/${slug}.md`);
