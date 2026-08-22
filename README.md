@@ -31,6 +31,9 @@ export VAULT="/Users/you/Documents/MyVault"
 alias slides='node ~/scripts/pdf2vault.mjs'
 ```
 
+## Demo
+https://github.com/user-attachments/assets/da56449c-ba72-44d9-9786-c7963286c059
+
 ## Run
 
 ```sh
