@@ -14,6 +14,9 @@ The excruciating labour I need to do every single lecture is: open the PDF, scre
 
 Slides become images, so Obsidian search can't see the text on them. If you need that, pipe `pdftotext -layout` into the note inside a `%%` comment block — hidden in preview, still searchable.
 
+## Demo
+https://github.com/user-attachments/assets/da56449c-ba72-44d9-9786-c7963286c059
+
 ## Stack
 
 Plain Node.js (`.mjs`, no dependencies) driving `pdftoppm` from Poppler. No plugin, no bundler — writing PNGs into the vault folder *is* the import; Obsidian's file watcher picks them up immediately.
@@ -30,9 +33,6 @@ Point the script at your vault — edit line 10, or set an env var:
 export VAULT="/Users/you/Documents/MyVault"
 alias slides='node ~/scripts/pdf2vault.mjs'
 ```
-
-## Demo
-https://github.com/user-attachments/assets/da56449c-ba72-44d9-9786-c7963286c059
 
 ## Run
 
