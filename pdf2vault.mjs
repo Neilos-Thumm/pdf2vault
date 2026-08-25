@@ -11,6 +11,7 @@ const VAULT = process.env.VAULT ?? "/Users/parunthummadetsak/Documents/Obsidian/
 const PASTED = "Pasted";
 const NOTES = "Notes";
 const DPI = 100; // 100 is legible for bullet slides; bump to 150 for dense diagrams
+const WIDTH = 825; //config size
 // -----------------------------------------------------------------------
 
 const slugify = (s) =>
@@ -75,7 +76,9 @@ if (pages.length === 0) die("no pages were produced");
 
 // 3. build the note
 const today = new Date().toISOString().slice(0, 10);
-const embeds = pages.map((f) => `![[${f}]]`).join("\n");
+const embeds = pages
+  .map((f) => (WIDTH ? `![[${f}|${WIDTH}]]` : `![[${f}]]`))
+  .join("\n");
 const note = `---
 date: ${today}
 source: ${basename(pdfPath)}
