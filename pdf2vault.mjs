@@ -10,8 +10,12 @@ import { basename, extname, join, resolve } from "node:path";
 const VAULT = process.env.VAULT ?? "/Users/parunthummadetsak/Documents/Obsidian/Local Vault";
 const PASTED = "Pasted";
 const NOTES = "Notes";
-const DPI = 100; // 100 is legible for bullet slides; bump to 150 for dense diagrams
-const WIDTH = 825; //config size
+// Render to a fixed pixel width instead of a fixed DPI. DPI depends on the
+// PDF's physical page size: PowerPoint slides are 720pt wide (-> 1000px at
+// 100 DPI) but Beamer slides are ~363pt wide (-> ~500px), which then got
+// upscaled to WIDTH in Obsidian and looked blurry.
+const RENDER_PX = 1650; // ~2x WIDTH so it stays sharp on Retina screens
+const WIDTH = 825; // display width in the note
 // -----------------------------------------------------------------------
 
 const slugify = (s) =>
@@ -59,7 +63,13 @@ mkdirSync(notesDir, { recursive: true });
 // 1. rasterize: pdftoppm writes <prefix>-01.png, <prefix>-02.png, ...
 const result = spawnSync(
   "pdftoppm",
-  ["-png", "-r", String(DPI), pdfPath, join(pastedDir, slug)],
+  [
+    "-png",
+    "-scale-to-x", String(RENDER_PX),
+    "-scale-to-y", "-1", // keep aspect ratio
+    pdfPath,
+    join(pastedDir, slug),
+  ],
   { stdio: "inherit" },
 );
 
