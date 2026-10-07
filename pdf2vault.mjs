@@ -14,7 +14,9 @@ const NOTES = "Notes";
 // PDF's physical page size: PowerPoint slides are 720pt wide (-> 1000px at
 // 100 DPI) but Beamer slides are ~363pt wide (-> ~500px), which then got
 // upscaled to WIDTH in Obsidian and looked blurry.
-const RENDER_PX = 1650; // ~2x WIDTH so it stays sharp on Retina screens
+
+// const RENDER_PX = 1650; // ~2x WIDTH so it stays sharp on Retina screens
+const RENDER_PX = 1240; // ~1.5x WIDTH so it stays sharp on Retina screens
 const WIDTH = 825; // display width in the note
 // -----------------------------------------------------------------------
 
